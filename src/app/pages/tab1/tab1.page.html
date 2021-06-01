@@ -1,17 +1,33 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
+<ion-header no-border>
+  <ion-toolbar color="dark">
     <ion-title>
-      Tab 1
+      K News
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content color="dark">
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col *ngFor="let n of noticias; index as i" size="12" sizeLg="3" sizeMd="4" sizeSm="6" sizeXs="12">
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+        <ion-card color="dark" >
+          <ion-card-header>
+            <ion-card-subtitle>
+              <span class="text-primary">{{ i+1 }}. </span>
+              <span class="noticias-source-name">{{ n.source.name }}</span>
+            </ion-card-subtitle>
+            <ion-card-title class="title">{{ n.title }}</ion-card-title>
+          </ion-card-header>
+
+          <ion-img *ngIf="n.urlToImage" [src]="n.urlToImage"></ion-img>
+
+          <ion-card-content>
+            <p>{{ n.description }}</p>
+          </ion-card-content>
+
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
