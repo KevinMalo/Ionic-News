@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { DatalocalService } from './datalocal.service';
+import { NotificationsService } from './notifications.service';
 
-describe('DatalocalService', () => {
-  let service: DatalocalService;
+describe('NotificationsService', () => {
+  let service: NotificationsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(DatalocalService);
+    service = TestBed.inject(NotificationsService);
   });
 
   it('should be created', () => {

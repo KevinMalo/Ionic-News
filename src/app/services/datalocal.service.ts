@@ -13,24 +13,36 @@ export class DatalocalService {
 
   constructor(private storage: Storage) {
     this.init();
-
+    this.cargarFavoritos();
   }
 
-  guardarNoticia( noticia: Article ) {
+  guardarNoticia(noticia: Article) {
 
-    const existe = this.noticias.find( noti => noti.title === noticia.title  );
+    const existe = this.noticias.find(noti => noti.title === noticia.title);
 
-    if ( !existe ) {
+    if (!existe) {
       this.noticias.unshift(noticia);
       this._storage?.set('favoritos', this.noticias)
-      .then(
-        () => console.log('Noticia guardada'),
-        error => console.error('Error guardando noticia:', error)
-      );
+        .then(
+          () => console.log('Noticia guardada'),
+          error => console.error('Error guardando noticia:', error)
+        );
     }
   }
 
-  cargarFavoritos() {
+  async cargarFavoritos() {
+
+    const data = await this._storage?.get('favoritos')
+    if (data) {
+      this.noticias = data;
+    }
+
+  }
+
+  async borrarNoticia(noticia: Article) {
+
+    this.noticias = this.noticias.filter( n => n.title !== noticia.title )
+    this._storage?.set('favoritos', this.noticias)
 
   }
 
