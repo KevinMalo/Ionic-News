@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Article } from '../../interfaces/interfaces';
-import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetController, Platform } from '@ionic/angular';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { DatalocalService } from '../../services/datalocal.service';
 import { NotificationsService } from '../../services/notifications.service';
@@ -16,7 +16,7 @@ export class NoticiaComponent implements OnInit {
   @Input() index: number;
   @Input() enFavoritos;
 
-  constructor(public actionSheetController: ActionSheetController, private socialSharing: SocialSharing, private datalocalService: DatalocalService, private notificationsService: NotificationsService) { }
+  constructor(public actionSheetController: ActionSheetController, private platform: Platform, private socialSharing: SocialSharing, private datalocalService: DatalocalService, private notificationsService: NotificationsService) { }
 
   abrirNoticia() {
     console.log('noticia', this.noticia.url);
@@ -53,14 +53,12 @@ export class NoticiaComponent implements OnInit {
         icon: 'share',
         handler: () => {
           console.log('Share clicked');
-          this.socialSharing.share(
-            this.noticia.title,
-            this.noticia.source.name,
-            '',
-            this.noticia.url
-          );
+
+          this.compartirNoticia();
+
+
         }
-      }, guardarBorrarBtn , {
+      }, guardarBorrarBtn, {
         text: 'Cancel',
         icon: 'close',
         role: 'cancel',
@@ -76,6 +74,34 @@ export class NoticiaComponent implements OnInit {
   }
 
 
-  ngOnInit() {}
+  ngOnInit() { }
+
+  compartirNoticia() {
+
+    if ( this.platform.is('capacitor') ) {
+      this.socialSharing.share(
+        this.noticia.title,
+        this.noticia.source.name,
+        '',
+        this.noticia.url
+      );
+    } else {
+      if (navigator.share) {
+        navigator.share({
+          title: this.noticia.title,
+          text: this.noticia.description,
+          url: this.noticia.url,
+        })
+          .then(() => console.log('Successful share'))
+          .catch((error) => console.log('Error sharing', error));
+      } else {
+        console.log('Api share no soportada');
+
+      }
+    }
+
+
+
+  }
 
 }
